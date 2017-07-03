@@ -26,28 +26,31 @@ public class DictionaryDaoImpl implements DictionaryDao {
     @Autowired
     MongoClient mongoClient;
 
+    @Autowired
+    MongoCollection<Dictionary> dictionaryCollection;
+
     @Override
     public List<Dictionary> getDictionaries() {
-        MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
+        //MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
         return dictionaryCollection.find().into(new ArrayList<>());
     }
 
     @Override
     public Dictionary getDictionary(String id) {
-        MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
+        //MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
         return dictionaryCollection.find(Filters.eq("id", id)).first();
     }
 
     @Override
     public Dictionary saveDictionary(Dictionary dictionary) {
-        MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
+        //MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
         dictionaryCollection.insertOne(dictionary);
         return dictionary;
     }
 
     @Override
     public Dictionary updateDictionary(Dictionary dictionary) {
-        MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
+        //MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
         dictionaryCollection.deleteOne(Filters.eq("id", dictionary.getId()));
         dictionaryCollection.insertOne(dictionary);
         return dictionary;
@@ -55,12 +58,12 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
     @Override
     public void deleteDictionary(String id) {
-        MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
+        //MongoCollection<Dictionary> dictionaryCollection = getDictionaryCollection();
         dictionaryCollection.deleteOne(Filters.eq("id", id));
     }
-
+/*
     private MongoCollection getDictionaryCollection() {
         MongoDatabase db = mongoClient.getDatabase(dictionaryDb);
         return db.getCollection(dictionaryCollectionName, Dictionary.class);
-    }
+    }*/
 }

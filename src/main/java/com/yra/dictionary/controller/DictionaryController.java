@@ -2,12 +2,16 @@ package com.yra.dictionary.controller;
 
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.service.DictionaryService;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DictionaryController {
@@ -16,7 +20,8 @@ public class DictionaryController {
 
     @RequestMapping(path = "/dictionary", method = RequestMethod.GET)
     List<Dictionary> getDictionaries() {
-        return dictionaryService.getDictionaries();
+        List<Dictionary> dictionaries = dictionaryService.getDictionaries();
+        return dictionaries;
     }
 
     @RequestMapping(path = "/dictionary/{id}", method = RequestMethod.GET)

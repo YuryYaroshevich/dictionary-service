@@ -3,14 +3,14 @@ package com.yra.dictionary.model;
 public class DictionaryEntry {
     String phrase;
     String translation;
-    String link;
+    String example;
 
     DictionaryEntry() {}
 
-    public DictionaryEntry(String phrase, String translation, String link) {
+    public DictionaryEntry(String phrase, String translation, String example) {
         this.phrase = phrase;
         this.translation = translation;
-        this.link = link;
+        this.example = example;
     }
 
     public String getPhrase() {
@@ -21,8 +21,8 @@ public class DictionaryEntry {
         return translation;
     }
 
-    public String getLink() {
-        return link;
+    public String getExample() {
+        return example;
     }
 
     @Override

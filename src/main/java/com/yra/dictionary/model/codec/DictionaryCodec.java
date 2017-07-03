@@ -30,7 +30,6 @@ public class DictionaryCodec implements Codec<Dictionary> {
         dictionary.setId(bsonReader.readString("id"));
         dictionary.setName(bsonReader.readString("name"));
         dictionary.setLanguage(bsonReader.readString("language"));
-        dictionary.setLink(bsonReader.readString("link"));
 
         Codec<DictionaryEntry> dictionaryEntryCodec = codecRegistry.get(DictionaryEntry.class);
         List<DictionaryEntry> dictionaryEntries = new ArrayList<>();
@@ -55,7 +54,6 @@ public class DictionaryCodec implements Codec<Dictionary> {
         bsonWriter.writeString("id", dictionary.getId());
         bsonWriter.writeString("name", dictionary.getName());
         bsonWriter.writeString("language", dictionary.getLanguage());
-        bsonWriter.writeString("link", dictionary.getLink());
 
         bsonWriter.writeStartArray("entries");
         Codec<DictionaryEntry> dictionaryEntryCodec = codecRegistry.get(DictionaryEntry.class);

@@ -10,16 +10,14 @@ public class Dictionary {
     private String id;
     private String name;
     private String language;
-    private String link;
     private List<DictionaryEntry> entries;
 
     public Dictionary() {}
 
-    public Dictionary(String id, String name, String language, String link, List<DictionaryEntry> entries) {
+    public Dictionary(String id, String name, String language, List<DictionaryEntry> entries) {
         this.id = id;
         this.name = name;
         this.language = language;
-        this.link = link;
         this.entries = entries;
     }
 
@@ -45,14 +43,6 @@ public class Dictionary {
 
     public void setEntries(List<DictionaryEntry> entries) {
         this.entries = entries;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
     }
 
     @Override

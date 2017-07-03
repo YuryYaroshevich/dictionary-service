@@ -1,7 +1,6 @@
 package com.yra.dictionary.model.codec;
 
 import com.yra.dictionary.model.DictionaryEntry;
-import org.bson.AbstractBsonReader;
 import org.bson.BsonInvalidOperationException;
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
@@ -14,18 +13,18 @@ public class DictionaryEntryCodec implements Codec<DictionaryEntry> {
     public DictionaryEntry decode(BsonReader bsonReader, DecoderContext decoderContext) {
         String phrase = "",
             translation = "",
-            link = "";
+            example = "";
         bsonReader.readStartDocument();
         try {
             phrase = bsonReader.readString("phrase");
             translation = bsonReader.readString("translation");
-            link = bsonReader.readString("link");
+            example = bsonReader.readString("example");
         } catch (BsonInvalidOperationException e) {
             //System.out.println(e);
         }
         bsonReader.readEndDocument();
 
-        return new DictionaryEntry(phrase, translation, link);
+        return new DictionaryEntry(phrase, translation, example);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class DictionaryEntryCodec implements Codec<DictionaryEntry> {
         bsonWriter.writeStartDocument();
         bsonWriter.writeString("phrase", dictionaryEntry.getPhrase());
         bsonWriter.writeString("translation", dictionaryEntry.getTranslation());
-        bsonWriter.writeString("link", dictionaryEntry.getLink());
+        bsonWriter.writeString("example", dictionaryEntry.getExample());
         bsonWriter.writeEndDocument();
     }
 

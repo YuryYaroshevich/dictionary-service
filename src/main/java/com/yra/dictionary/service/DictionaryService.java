@@ -7,6 +7,8 @@ import java.util.List;
 public interface DictionaryService {
     List<Dictionary> getDictionaries();
 
+    List<Dictionary> getDictionaries(List<String> ids);
+
     Dictionary getDictionary(String id);
 
     Dictionary saveDictionary(Dictionary dictionary);

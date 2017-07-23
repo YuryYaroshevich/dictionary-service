@@ -7,39 +7,47 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(path = "/dictionary")
 public class DictionaryController {
     @Autowired
     private DictionaryService dictionaryService;
 
-    @RequestMapping(path = "/dictionary", method = RequestMethod.GET)
-    List<Dictionary> getDictionaries() {
-        List<Dictionary> dictionaries = dictionaryService.getDictionaries();
-        return dictionaries;
+    @GetMapping
+    List<Dictionary> getDictionaries(@RequestParam(required = false) List<String> ids) {
+        if (ids == null) {
+            return dictionaryService.getDictionaries();
+        } else {
+            return dictionaryService.getDictionaries(ids);
+        }
     }
 
-    @RequestMapping(path = "/dictionary/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     Dictionary getDictionary(@PathVariable String id) {
         return dictionaryService.getDictionary(id);
     }
 
-    @RequestMapping(path = "/dictionary", method = RequestMethod.POST)
+    @PostMapping
     Dictionary createDictionary(@RequestBody Dictionary dictionary) {
         return dictionaryService.saveDictionary(dictionary);
     }
 
-    @RequestMapping(path = "/dictionary", method = RequestMethod.PUT)
+    @PutMapping
     Dictionary updateDictionary(@RequestBody Dictionary dictionary) {
         return dictionaryService.updateDictionary(dictionary);
     }
 
-    @RequestMapping(path = "/dictionary/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     ResponseEntity deleteDictionary(@PathVariable String id) {
         dictionaryService.deleteDictionary(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

@@ -19,6 +19,11 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
+    public List<Dictionary> getDictionaries(List<String> ids) {
+        return dictionaryDao.getDictionaries(ids);
+    }
+
+    @Override
     public Dictionary getDictionary(String id) {
         return dictionaryDao.getDictionary(id);
     }

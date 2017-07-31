@@ -2,7 +2,6 @@ package com.yra.dictionary.controller;
 
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.service.DictionaryService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

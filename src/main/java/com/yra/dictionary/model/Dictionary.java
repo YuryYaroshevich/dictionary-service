@@ -11,6 +11,7 @@ public class Dictionary {
     private String name;
     private String language;
     private List<DictionaryEntry> entries;
+    private List<String> tags;
 
     public Dictionary() {}
 
@@ -48,23 +49,26 @@ public class Dictionary {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Dictionary)) return false;
 
         Dictionary that = (Dictionary) o;
 
+        if (!_id.equals(that._id)) return false;
         if (!id.equals(that.id)) return false;
         if (!name.equals(that.name)) return false;
         if (!language.equals(that.language)) return false;
-        return entries.equals(that.entries);
-
+        if (entries != null ? !entries.equals(that.entries) : that.entries != null) return false;
+        return tags != null ? tags.equals(that.tags) : that.tags == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = _id.hashCode();
+        result = 31 * result + id.hashCode();
         result = 31 * result + name.hashCode();
         result = 31 * result + language.hashCode();
-        result = 31 * result + entries.hashCode();
+        result = 31 * result + (entries != null ? entries.hashCode() : 0);
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
         return result;
     }
 
@@ -82,5 +86,13 @@ public class Dictionary {
 
     public List<DictionaryEntry> getEntries() {
         return entries;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

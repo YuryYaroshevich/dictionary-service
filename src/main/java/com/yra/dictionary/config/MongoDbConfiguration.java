@@ -6,7 +6,10 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.yra.dictionary.model.Dictionary;
+import com.yra.dictionary.model.Tag;
 import de.undercouch.bson4jackson.BsonFactory;
 import de.undercouch.bson4jackson.BsonParser;
 import fr.javatic.mongo.jacksonCodec.JacksonCodecProvider;
@@ -16,7 +19,6 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class MongoDbConfiguration {
@@ -54,5 +56,12 @@ public class MongoDbConfiguration {
     @Bean
     public MongoCollection<Dictionary> dictionaryCollection(MongoDatabase mongoDatabase) {
         return mongoDatabase.getCollection("dictionary", Dictionary.class);
+    }
+
+    @Bean MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {
+        MongoCollection<Tag> tagCollection = mongoDatabase.getCollection("tag", Tag.class);
+        tagCollection.createIndex(Indexes.ascending("name"),
+                new IndexOptions().unique(true));
+        return tagCollection;
     }
 }

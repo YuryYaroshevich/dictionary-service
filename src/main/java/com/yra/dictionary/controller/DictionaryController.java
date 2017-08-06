@@ -1,7 +1,10 @@
 package com.yra.dictionary.controller;
 
+import com.mongodb.client.result.UpdateResult;
 import com.yra.dictionary.model.Dictionary;
+import com.yra.dictionary.model.Tag;
 import com.yra.dictionary.service.DictionaryService;
+import com.yra.dictionary.service.TagService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,9 @@ public class DictionaryController {
     @Autowired
     private DictionaryService dictionaryService;
 
+    @Autowired
+    private TagService tagService;
+
     @GetMapping
     List<Dictionary> getDictionaries(@RequestParam(required = false) List<String> ids) {
         if (ids == null) {
@@ -38,7 +44,9 @@ public class DictionaryController {
 
     @PostMapping
     Dictionary createDictionary(@RequestBody Dictionary dictionary) {
-        return dictionaryService.saveDictionary(dictionary);
+        dictionary = dictionaryService.saveDictionary(dictionary);
+        tagService.save(dictionary.getTags());
+        return dictionary;
     }
 
     @PutMapping
@@ -50,5 +58,11 @@ public class DictionaryController {
     ResponseEntity deleteDictionary(@PathVariable String id) {
         dictionaryService.deleteDictionary(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(path = "/tags", method = RequestMethod.POST)
+    ResponseEntity saveTags(@RequestBody List<String> tags) {
+        UpdateResult res = tagService.save(tags);
+        return new ResponseEntity(res, HttpStatus.OK);
     }
 }

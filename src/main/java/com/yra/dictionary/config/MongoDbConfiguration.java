@@ -60,7 +60,7 @@ public class MongoDbConfiguration {
 
     @Bean MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {
         MongoCollection<Tag> tagCollection = mongoDatabase.getCollection("tag", Tag.class);
-        tagCollection.createIndex(Indexes.ascending("name"),
+        tagCollection.createIndex(Indexes.text("name"),
                 new IndexOptions().unique(true));
         return tagCollection;
     }

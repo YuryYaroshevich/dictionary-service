@@ -1,8 +1,6 @@
 package com.yra.dictionary.controller;
 
-import com.mongodb.client.result.UpdateResult;
 import com.yra.dictionary.model.Dictionary;
-import com.yra.dictionary.model.Tag;
 import com.yra.dictionary.service.DictionaryService;
 import com.yra.dictionary.service.TagService;
 import java.util.List;
@@ -45,24 +43,22 @@ public class DictionaryController {
     @PostMapping
     Dictionary createDictionary(@RequestBody Dictionary dictionary) {
         dictionary = dictionaryService.saveDictionary(dictionary);
-        tagService.save(dictionary.getTags());
+        //tagService.save(dictionary.getTags());
         return dictionary;
     }
 
     @PutMapping
-    Dictionary updateDictionary(@RequestBody Dictionary dictionary) {
-        return dictionaryService.updateDictionary(dictionary);
+    Dictionary updateDictionary(@RequestBody Dictionary dictionary,
+                                @RequestParam List<String> newTags,
+                                @RequestParam List<String> removedTags) {
+        dictionary = dictionaryService.updateDictionary(dictionary);
+        tagService.save(newTags, removedTags);
+        return dictionary;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     ResponseEntity deleteDictionary(@PathVariable String id) {
         dictionaryService.deleteDictionary(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @RequestMapping(path = "/tags", method = RequestMethod.POST)
-    ResponseEntity saveTags(@RequestBody List<String> tags) {
-        UpdateResult res = tagService.save(tags);
-        return new ResponseEntity(res, HttpStatus.OK);
     }
 }

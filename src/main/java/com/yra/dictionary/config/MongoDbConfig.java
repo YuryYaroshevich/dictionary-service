@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.yra.dictionary.model.Account;
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.model.Tag;
 import de.undercouch.bson4jackson.BsonFactory;
@@ -21,7 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MongoDbConfiguration {
+public class MongoDbConfig {
     @Value("${mongodb.host}")
     String mongoHost;
 
@@ -63,10 +64,19 @@ public class MongoDbConfiguration {
         return dictionaryCollection;
     }
 
-    @Bean MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {
+    @Bean
+    public MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {
         MongoCollection<Tag> tagCollection = mongoDatabase.getCollection("tag", Tag.class);
         tagCollection.createIndex(Indexes.text("name"),
                 new IndexOptions().unique(true));
         return tagCollection;
+    }
+
+    @Bean
+    public MongoCollection<Account> accountCollection(MongoDatabase mongoDatabase) {
+        MongoCollection<Account> accountCollection = mongoDatabase.getCollection("account", Account.class);
+        accountCollection.createIndex(Indexes.ascending("email"),
+                new IndexOptions().unique(true));
+        return accountCollection;
     }
 }

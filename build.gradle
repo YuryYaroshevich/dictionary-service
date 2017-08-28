@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://dl.bintray.com/ylemoigne/maven" }
+}
+
+group = 'com.yra'
+version = '0.0.1-SNAPSHOT'
+
+description = """dictionary"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.5.6.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.5.6.RELEASE'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.8.7'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version:'2.8.7'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.8.7'
+    compile group: 'fr.javatic.mongo', name: 'mongo-jackson-codec', version:'3.2.2__0.5'
+    compile group: 'org.mongodb', name: 'mongo-java-driver', version:'3.4.2'
+    compile group: 'org.mongodb', name: 'mongodb-driver-core', version:'3.4.2'
+    compile group: 'de.undercouch', name: 'bson4jackson', version:'2.7.0'
+    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.6.RELEASE') {
+        exclude(module: 'commons-logging')
+    }
+}

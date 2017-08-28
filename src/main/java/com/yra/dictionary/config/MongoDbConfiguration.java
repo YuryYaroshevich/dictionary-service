@@ -55,7 +55,12 @@ public class MongoDbConfiguration {
 
     @Bean
     public MongoCollection<Dictionary> dictionaryCollection(MongoDatabase mongoDatabase) {
-        return mongoDatabase.getCollection("dictionary", Dictionary.class);
+        MongoCollection<Dictionary> dictionaryCollection = mongoDatabase
+                .getCollection("dictionary", Dictionary.class);
+        dictionaryCollection.createIndex(Indexes.text("name"),
+                new IndexOptions().languageOverride("lang_of_document"));
+        dictionaryCollection.createIndex(Indexes.ascending("tags"));
+        return dictionaryCollection;
     }
 
     @Bean MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {

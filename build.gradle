@@ -32,6 +32,8 @@ dependencies {
     compile group: 'org.mongodb', name: 'mongo-java-driver', version:'3.4.2'
     compile group: 'org.mongodb', name: 'mongodb-driver-core', version:'3.4.2'
     compile group: 'de.undercouch', name: 'bson4jackson', version:'2.7.0'
+    compile("io.jsonwebtoken:jjwt:0.7.0")
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.6.RELEASE') {
         exclude(module: 'commons-logging')
     }

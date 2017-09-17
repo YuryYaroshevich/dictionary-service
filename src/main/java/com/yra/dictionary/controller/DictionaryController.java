@@ -3,7 +3,9 @@ package com.yra.dictionary.controller;
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.service.DictionaryService;
 import com.yra.dictionary.service.TagService;
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,38 +29,42 @@ public class DictionaryController {
     private TagService tagService;
 
     @GetMapping
-    List<Dictionary> getDictionaries(@RequestParam(required = false) List<String> ids) {
+    List<Dictionary> getDictionaries(@RequestParam(required = false) List<String> ids,
+                                     Principal principal) {
+        String user = principal.getName();
         if (ids == null) {
-            return dictionaryService.getDictionaries();
+            return dictionaryService.getDictionaries(user);
         } else {
-            return dictionaryService.getDictionaries(ids);
+            return dictionaryService.getDictionaries(ids, user);
         }
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    Dictionary getDictionary(@PathVariable String id) {
-        return dictionaryService.getDictionary(id);
+    Dictionary getDictionary(@PathVariable String id, Principal principal) {
+        return dictionaryService.getDictionary(id, principal.getName());
     }
 
     @PostMapping
-    Dictionary createDictionary(@RequestBody Dictionary dictionary) {
+    Dictionary createDictionary(@RequestBody Dictionary dictionary, Principal principal) {
+        dictionary.setUser(principal.getName());
         dictionary = dictionaryService.saveDictionary(dictionary);
-        //tagService.save(dictionary.getTags());
         return dictionary;
     }
 
     @PutMapping
     Dictionary updateDictionary(@RequestBody Dictionary dictionary,
-                                @RequestParam List<String> newTags,
-                                @RequestParam List<String> removedTags) {
+                                @RequestParam Set<String> newTags,
+                                @RequestParam Set<String> removedTags,
+                                Principal principal) {
+        dictionary.setUser(principal.getName());
         dictionary = dictionaryService.updateDictionary(dictionary);
-        tagService.save(newTags, removedTags);
+        tagService.save(newTags, removedTags, dictionary.getUser());
         return dictionary;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    ResponseEntity deleteDictionary(@PathVariable String id) {
-        dictionaryService.deleteDictionary(id);
+    ResponseEntity deleteDictionary(@PathVariable String id, Principal principal) {
+        dictionaryService.deleteDictionary(id, principal.getName());
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

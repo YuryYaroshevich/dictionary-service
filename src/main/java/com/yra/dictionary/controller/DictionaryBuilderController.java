@@ -2,6 +2,7 @@ package com.yra.dictionary.controller;
 
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.service.DictionaryService;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,21 +26,23 @@ public class DictionaryBuilderController {
 
   @RequestMapping(path = "/merge", method = RequestMethod.PUT)
   public ResponseEntity mergeDictionaries(@RequestParam List<String> ids,
-                                          @RequestParam String name) {
-    dictionaryService.mergeDictionaries(ids, name);
+                                          @RequestParam String name, Principal principal) {
+    dictionaryService.mergeDictionaries(ids, name, principal.getName());
     return ResponseEntity.noContent().build();
   }
+
+  static class ExtractDictionaryRequest {
+    Dictionary extractedDictionary;
+    Dictionary oldDictionary;
+
+    public void setExtractedDictionary(Dictionary extractedDictionary) {
+      this.extractedDictionary = extractedDictionary;
+    }
+
+    public void setOldDictionary(Dictionary oldDictionary) {
+      this.oldDictionary = oldDictionary;
+    }
+  }
 }
 
-class ExtractDictionaryRequest {
-  Dictionary extractedDictionary;
-  Dictionary oldDictionary;
 
-  public void setExtractedDictionary(Dictionary extractedDictionary) {
-    this.extractedDictionary = extractedDictionary;
-  }
-
-  public void setOldDictionary(Dictionary oldDictionary) {
-    this.oldDictionary = oldDictionary;
-  }
-}

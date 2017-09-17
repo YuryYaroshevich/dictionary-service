@@ -1,6 +1,9 @@
 package com.yra.dictionary.service;
 
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Indexes.text;
 import static com.yra.dictionary.controller.SearchType.name;
 import static com.yra.dictionary.controller.SearchType.tag;
 
@@ -27,14 +30,14 @@ public class SearchService {
   public SearchService() {
     filterCreatorMapping = new HashMap<>();
     filterCreatorMapping.put(tag,
-            (searchText) -> Filters.eq("tags", searchText));
+            (searchText) -> eq("tags", searchText));
     filterCreatorMapping.put(name,
-            (searchText) -> Filters.text(searchText));
+            (searchText) -> text(searchText));
   }
 
   public List<Dictionary> search(String searchText,
-                                 SearchType searchType) {
-    Bson filter = filterCreatorMapping.get(searchType).apply(searchText);
-    return dictionaryCollection.find(filter).into(new ArrayList<>());
+                                 SearchType searchType, String user) {
+    Bson searchFilter = filterCreatorMapping.get(searchType).apply(searchText);
+    return dictionaryCollection.find(and(searchFilter, eq(user))).into(new ArrayList<>());
   }
 }

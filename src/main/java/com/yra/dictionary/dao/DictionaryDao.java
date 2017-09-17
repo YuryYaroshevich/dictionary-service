@@ -1,11 +1,16 @@
 package com.yra.dictionary.dao;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.yra.dictionary.model.Dictionary;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,17 +26,20 @@ public class DictionaryDao {
     @Autowired
     MongoCollection<Dictionary> dictionaryCollection;
 
-    public List<Dictionary> getDictionaries() {
-        return dictionaryCollection.find().into(new ArrayList<>());
+    public List<Dictionary> getDictionaries(String user) {
+        return dictionaryCollection.find(eq("user", user))
+                .into(new ArrayList<>());
     }
 
-    public List<Dictionary> getDictionaries(List<String> ids) {
+    public List<Dictionary> getDictionaries(List<String> ids, String user) {
         return dictionaryCollection
-                .find(Filters.in("id", ids)).into(new ArrayList<>());
+                .find(dictionaryIdsAndUser(ids, user))
+                .into(new ArrayList<>());
     }
 
-    public Dictionary getDictionary(String id) {
-        return dictionaryCollection.find(Filters.eq("id", id)).first();
+    public Dictionary getDictionary(String id, String user) {
+        return dictionaryCollection.find(
+                dictionaryIdAndUser(id, user)).first();
     }
 
     public Dictionary saveDictionary(Dictionary dictionary) {
@@ -40,16 +48,27 @@ public class DictionaryDao {
     }
 
     public Dictionary updateDictionary(Dictionary dictionary) {
-        dictionaryCollection.deleteOne(Filters.eq("id", dictionary.getId()));
+        String dictionaryId = dictionary.getId();
+        String user = dictionary.getUser();
+        dictionaryCollection.deleteOne(
+                dictionaryIdAndUser(dictionaryId, user));
         dictionaryCollection.insertOne(dictionary);
         return dictionary;
     }
 
-    public void deleteDictionary(String id) {
-        dictionaryCollection.deleteOne(Filters.eq("id", id));
+    public Dictionary deleteDictionary(String id, String user) {
+        return dictionaryCollection.findOneAndDelete(dictionaryIdAndUser(id, user));
     }
 
-    public void deleteAll(List<String> ids) {
-        dictionaryCollection.deleteMany(Filters.in("id", ids));
+    public void deleteAll(List<String> ids, String user) {
+        dictionaryCollection.deleteMany(dictionaryIdsAndUser(ids, user));
+    }
+
+    private static Bson dictionaryIdAndUser(String id, String user) {
+        return and(eq("id", id),eq("user", user));
+    }
+
+    private static Bson dictionaryIdsAndUser(List<String> ids, String user) {
+        return and(in("id", ids),eq("user", user));
     }
 }

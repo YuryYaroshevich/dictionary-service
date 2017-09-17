@@ -2,7 +2,9 @@ package com.yra.dictionary.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Dictionary {
     @JsonIgnore
@@ -10,8 +12,9 @@ public class Dictionary {
     private String id;
     private String name;
     private String language;
+    private String user;
     private List<DictionaryEntry> entries;
-    private List<String> tags;
+    private Set<String> tags = new HashSet<>();
 
     public Dictionary() {}
 
@@ -46,32 +49,6 @@ public class Dictionary {
         this.entries = entries;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Dictionary)) return false;
-
-        Dictionary that = (Dictionary) o;
-
-        if (!_id.equals(that._id)) return false;
-        if (!id.equals(that.id)) return false;
-        if (!name.equals(that.name)) return false;
-        if (!language.equals(that.language)) return false;
-        if (entries != null ? !entries.equals(that.entries) : that.entries != null) return false;
-        return tags != null ? tags.equals(that.tags) : that.tags == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = _id.hashCode();
-        result = 31 * result + id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + language.hashCode();
-        result = 31 * result + (entries != null ? entries.hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
-        return result;
-    }
-
     public String getId() {
         return id;
     }
@@ -88,11 +65,47 @@ public class Dictionary {
         return entries;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Dictionary)) return false;
+
+        Dictionary that = (Dictionary) o;
+
+        if (_id != null ? !_id.equals(that._id) : that._id != null) return false;
+        if (!id.equals(that.id)) return false;
+        if (!name.equals(that.name)) return false;
+        if (!language.equals(that.language)) return false;
+        if (!user.equals(that.user)) return false;
+        if (entries != null ? !entries.equals(that.entries) : that.entries != null) return false;
+        return tags != null ? tags.equals(that.tags) : that.tags == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = _id != null ? _id.hashCode() : 0;
+        result = 31 * result + id.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + language.hashCode();
+        result = 31 * result + user.hashCode();
+        result = 31 * result + (entries != null ? entries.hashCode() : 0);
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        return result;
     }
 }

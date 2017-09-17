@@ -2,6 +2,7 @@ package com.yra.dictionary.controller;
 
 import com.yra.dictionary.model.Dictionary;
 import com.yra.dictionary.service.SearchService;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,8 @@ public class SearchController {
 
   @GetMapping
   public List<Dictionary> search(@RequestParam String searchText,
-                                 @RequestParam SearchType searchType) {
-    return searchService.search(searchText, searchType);
+                                 @RequestParam SearchType searchType,
+                                 Principal principal) {
+    return searchService.search(searchText, searchType, principal.getName());
   }
 }

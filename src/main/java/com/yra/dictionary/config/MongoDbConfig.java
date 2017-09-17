@@ -1,5 +1,9 @@
 package com.yra.dictionary.config;
 
+import static com.mongodb.client.model.Indexes.ascending;
+import static com.mongodb.client.model.Indexes.compoundIndex;
+import static com.mongodb.client.model.Indexes.text;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -58,16 +62,16 @@ public class MongoDbConfig {
     public MongoCollection<Dictionary> dictionaryCollection(MongoDatabase mongoDatabase) {
         MongoCollection<Dictionary> dictionaryCollection = mongoDatabase
                 .getCollection("dictionary", Dictionary.class);
-        dictionaryCollection.createIndex(Indexes.text("name"),
+        dictionaryCollection.createIndex(text("name"),
                 new IndexOptions().languageOverride("lang_of_document"));
-        dictionaryCollection.createIndex(Indexes.ascending("tags"));
+        dictionaryCollection.createIndex(ascending("tags"));
         return dictionaryCollection;
     }
 
     @Bean
     public MongoCollection<Tag> tagCollection(MongoDatabase mongoDatabase) {
         MongoCollection<Tag> tagCollection = mongoDatabase.getCollection("tag", Tag.class);
-        tagCollection.createIndex(Indexes.text("name"),
+        tagCollection.createIndex(compoundIndex(text("name"), ascending("user")),
                 new IndexOptions().unique(true));
         return tagCollection;
     }
@@ -75,7 +79,7 @@ public class MongoDbConfig {
     @Bean
     public MongoCollection<Account> accountCollection(MongoDatabase mongoDatabase) {
         MongoCollection<Account> accountCollection = mongoDatabase.getCollection("account", Account.class);
-        accountCollection.createIndex(Indexes.ascending("email"),
+        accountCollection.createIndex(ascending("email"),
                 new IndexOptions().unique(true));
         return accountCollection;
     }

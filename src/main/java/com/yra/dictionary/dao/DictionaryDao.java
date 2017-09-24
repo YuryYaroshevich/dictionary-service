@@ -3,6 +3,7 @@ package com.yra.dictionary.dao;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
+import static java.util.stream.Collectors.toList;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -10,6 +11,8 @@ import com.mongodb.client.model.Filters;
 import com.yra.dictionary.model.Dictionary;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +65,23 @@ public class DictionaryDao {
 
     public void deleteAll(List<String> ids, String user) {
         dictionaryCollection.deleteMany(dictionaryIdsAndUser(ids, user));
+    }
+
+    public boolean exists(List<String> ids, String user) {
+        return dictionaryCollection.count(dictionaryIdsAndUser(ids, user)) == ids.size();
+    }
+
+    public void copyDictionaries(List<String> dictionaryIds,
+                                 String fromUser, String toUser) {
+        List<Dictionary> dictionaries = getDictionaries(dictionaryIds, fromUser)
+                .stream()
+                .map(dictionary -> {
+                    dictionary.set_id(null);
+                    dictionary.setId(UUID.randomUUID().toString());
+                    dictionary.setUser(toUser);
+                    return dictionary;
+                }).collect(toList());
+        dictionaryCollection.insertMany(dictionaries);
     }
 
     private static Bson dictionaryIdAndUser(String id, String user) {

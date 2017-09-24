@@ -32,12 +32,13 @@ public class SearchService {
     filterCreatorMapping.put(tag,
             (searchText) -> eq("tags", searchText));
     filterCreatorMapping.put(name,
-            (searchText) -> text(searchText));
+            (searchText) -> eq("name", searchText));
   }
 
   public List<Dictionary> search(String searchText,
                                  SearchType searchType, String user) {
     Bson searchFilter = filterCreatorMapping.get(searchType).apply(searchText);
-    return dictionaryCollection.find(and(searchFilter, eq(user))).into(new ArrayList<>());
+    return dictionaryCollection.find(and(searchFilter, eq("user", user)))
+            .into(new ArrayList<>());
   }
 }

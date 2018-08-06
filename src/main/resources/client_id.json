@@ -1,0 +1,10 @@
+{
+  "web": {
+    "client_id":"699410328807-2f47r1423793t08c5qnv58imifr5dage.apps.googleusercontent.com",
+    "project_id":"api-project-699410328807",
+    "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+    "token_uri":"https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret":"fidTVxFZvqyftOEap4B0sX-n"
+  }
+}

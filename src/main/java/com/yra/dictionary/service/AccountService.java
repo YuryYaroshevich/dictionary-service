@@ -28,7 +28,7 @@ public class AccountService implements UserDetailsService {
   public UserDetails loadUserByUsername(String email) {
     Account account = accountCollection.find(Filters.eq("email", email)).first();
     if (account == null) {
-      throw new UsernameNotFoundException(account.getEmail());
+      throw new UsernameNotFoundException(email);
     }
     return new User(account.getEmail(), account.getPassword(), emptyList());
   }

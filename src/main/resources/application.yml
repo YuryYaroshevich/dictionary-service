@@ -1,0 +1,36 @@
+server:
+  port: 8081
+
+mongodb:
+  host: localhost
+  port: 27017
+
+dictionary:
+  db:
+    name: dictionary
+  collection:
+    name: dictionary
+
+
+gmail:
+  client:
+    clientId: 699410328807-2f47r1423793t08c5qnv58imifr5dage.apps.googleusercontent.com
+    clientSecret: fidTVxFZvqyftOEap4B0sX-n
+    accessTokenUri: https://accounts.google.com/o/oauth2/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+    scope: openid, email
+    pre-established-redirect-uri: http://localhost:8081/login/gmail
+    registered-redirect-uri: http://localhost:8081/login/gmail
+    use-current-uri: false
+  resource:
+    userInfoUri: https://www.googleapis.com/userinfo/v2/me
+
+security:
+  oauth2:
+    client:
+      pre-established-redirect-uri: http://localhost:3000
+      registered-redirect-uri: http://localhost:3000
+      use-current-uri: false
